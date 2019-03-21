@@ -103,7 +103,7 @@ def rotate(image, points=[], rects=[], rotation_angle=(-15, 15)):
 
 
 if __name__ == '__main__':
-    image = cv2.imread('D:/test.jpg')
+    image = cv2.imread('./test.jpg')
     image_ = image.copy()
     points = [(113, 127), (156, 127), (156, 170), (113, 170), (179, 127), (224, 127), (224, 171), (179, 171)]
     for point in points:
