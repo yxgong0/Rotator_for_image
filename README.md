@@ -8,13 +8,9 @@ OpenCV3.4
 
 # Details
 This method will rotate the input images and extend the edge to ensure all the pixels of the initial image will not be abandoned.
-That means the procedure will look like this:
+That means the procedure will look like this:![1](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch1.png)
 
-![1](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch1.png)
-
-We are not doing this work:
-
-![2](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch2.png)
+We are not doing this work:![2](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch2.png)
 
 The main method is rotate(image, points, rects, rotation_angle) in which:
 
