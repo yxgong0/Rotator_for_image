@@ -31,7 +31,7 @@ def rotate_point(point, radian, width_increased, height_increased, new_w, new_h)
     return point_restored
 
 
-def random_rotation(image, points=[], rects=[], rotation_angle=(-15, 15)):
+def rotate(image, points=[], rects=[], rotation_angle=(-15, 15)):
     # To validate the type of each parameter
     assert isinstance(image, np.ndarray)
     assert isinstance(points, list)
@@ -113,7 +113,7 @@ if __name__ == '__main__':
                   (0, 0, 255))
     cv2.imshow('initial_image', image_)
 
-    image_rotated, new_points, new_rects = random_rotation(image, points, rects)
+    image_rotated, new_points, new_rects = rotate(image, points, rects)
     for new_point in new_points:
         cv2.circle(image_rotated, new_point, 1, (0, 0, 255))
     for new_rect in new_rects:
