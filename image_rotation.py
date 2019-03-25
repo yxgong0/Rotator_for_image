@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import math
 import random
-
+import time
 
 # Definition of rotated rectangles, where box_points is a list of the four vertexes of the rectangle
 # The range of the angle is [0, 360)
@@ -19,7 +19,7 @@ class RotatedRect:
 
 
 class Rotater:
-    def __init__(self, image, points=[], rects=[], np_rotated_rects=np.zeros((5,1)), cv_rotated_rects=[],
+    def __init__(self, image, points=[], rects=[], np_rotated_rects=np.zeros((1,5)), cv_rotated_rects=[],
                  quadrilaterals=[], polygons=[], rotation_angle=(-15,15)):
         self.image = image
         self.points = points
@@ -69,8 +69,8 @@ class Rotater:
                 assert isinstance(rect, tuple) and rect.__len__() == 4
         if self.np_rotated_rects.nonzero().__len__() != 0:
             self.np_rotated_rects_flag = True
-            for r in range(self.np_rotated_rects.shape[1]):
-                line = self.np_rotated_rects[:, r]
+            for r in range(self.np_rotated_rects.shape[0]):
+                line = self.np_rotated_rects[r, :]
                 assert line.__len__() == 5
         if self.cv_rotated_rects.__len__() != 0:
             self.cv_rotated_rects_flag = True
@@ -134,13 +134,15 @@ class Rotater:
 
         # Extend the edges of the initial image according to the new width and height
         image_expanded = np.zeros((int(new_h), int(new_w), 3), np.uint8)
-        for s in range(int(new_h)):
-            for t in range(int(new_w)):
-                if height_increment // 2 <= s < height_increment // 2 + h and \
-                        width_increment // 2 <= t < width_increment // 2 + w:
-                    image_expanded[s, t][0] = image[s - height_increment // 2, t - width_increment // 2][0]
-                    image_expanded[s, t][1] = image[s - height_increment // 2, t - width_increment // 2][1]
-                    image_expanded[s, t][2] = image[s - height_increment // 2, t - width_increment // 2][2]
+        # for s in range(int(new_h)):
+        #     for t in range(int(new_w)):
+        #         if height_increment // 2 <= s < height_increment // 2 + h and \
+        #                 width_increment // 2 <= t < width_increment // 2 + w:
+        #             image_expanded[s, t][0] = self.image[s - height_increment // 2, t - width_increment // 2][0]
+        #             image_expanded[s, t][1] = self.image[s - height_increment // 2, t - width_increment // 2][1]
+        #             image_expanded[s, t][2] = self.image[s - height_increment // 2, t - width_increment // 2][2]
+        image_expanded[height_increment // 2:height_increment // 2 + h, width_increment // 2:width_increment // 2 + w]\
+            = self.image
 
         # Rotate the image
         M = cv2.getRotationMatrix2D((new_h / 2., new_w / 2.), angle, 1.0)
@@ -177,22 +179,22 @@ class Rotater:
         if self.np_rotated_rects_flag:
             # Produce the rotated rect from np_rotated_rect
             new_np_rotated_rects = np.zeros(self.np_rotated_rects.shape)
-            for r in range(self.np_rotated_rects.shape[1]):
-                x_min = self.np_rotated_rects[0, r]
-                y_min = self.np_rotated_rects[1, r]
-                x_max = self.np_rotated_rects[2, r]
-                y_max = self.np_rotated_rects[3, r]
-                theta = self.np_rotated_rects[4, r]
+            for r in range(self.np_rotated_rects.shape[0]):
+                x_min = self.np_rotated_rects[r, 0]
+                y_min = self.np_rotated_rects[r, 1]
+                x_max = self.np_rotated_rects[r, 2]
+                y_max = self.np_rotated_rects[r, 3]
+                theta = self.np_rotated_rects[r, 4]
                 tl_point = (x_min, y_min)
                 br_point = (x_max, y_max)
                 new_tl_point = self.rotate_point(tl_point)
                 new_br_point = self.rotate_point(br_point)
                 new_theta = theta - angle
-                new_np_rotated_rects[0, r] = new_tl_point[0]
-                new_np_rotated_rects[1, r] = new_tl_point[1]
-                new_np_rotated_rects[2, r] = new_br_point[0]
-                new_np_rotated_rects[3, r] = new_br_point[1]
-                new_np_rotated_rects[4, r] = new_theta
+                new_np_rotated_rects[r, 0] = new_tl_point[0]
+                new_np_rotated_rects[r, 1] = new_tl_point[1]
+                new_np_rotated_rects[r, 2] = new_br_point[0]
+                new_np_rotated_rects[r, 3] = new_br_point[1]
+                new_np_rotated_rects[r, 4] = new_theta
 
                 self.results['np_rotated_rects'] = new_np_rotated_rects
 
@@ -269,28 +271,28 @@ if __name__ == '__main__':
     cv2.rectangle(image_, (rects[0][0], rects[0][1]), (rects[0][0] + rects[0][2], rects[0][1] + rects[0][3]),
                   (0, 255, 0))
     # Annotations of rotated rectangles formatted as numpy.array
-    np_rotated_rects = np.zeros((5, 1))
+    np_rotated_rects = np.zeros((1, 5))
     np_rotated_rects[0, 0] = 154
-    np_rotated_rects[1, 0] = 66
-    np_rotated_rects[2, 0] = 186
-    np_rotated_rects[3, 0] = 90
-    np_rotated_rects[4, 0] = 0
+    np_rotated_rects[0, 1] = 66
+    np_rotated_rects[0, 2] = 186
+    np_rotated_rects[0, 3] = 90
+    np_rotated_rects[0, 4] = 0
     for r in range(np_rotated_rects.shape[1]):
         x_min = int(np_rotated_rects[0, 0])
-        y_min = int(np_rotated_rects[1, 0])
-        x_max = int(np_rotated_rects[2, 0])
-        y_max = int(np_rotated_rects[3, 0])
-        theta = int(np_rotated_rects[4, 0])
+        y_min = int(np_rotated_rects[0, 1])
+        x_max = int(np_rotated_rects[0, 2])
+        y_max = int(np_rotated_rects[0, 3])
+        theta = int(np_rotated_rects[0, 4])
         cv2.circle(image_, (x_min, y_min), 1, (255, 0, 0))
         cv2.circle(image_, (x_max, y_max), 1, (255, 0, 0))
     # Annotations of rotated rectangles formatted as opencv
-    points = [(133, 142), (136, 141), (141, 147), (139, 148), (132, 151), (137, 154), (128, 150), (141, 154)]
-    cv_rotated_rect = cv2.minAreaRect(np.array(points))
+    pts = [(133, 142), (136, 141), (141, 147), (139, 148), (132, 151), (137, 154), (128, 150), (141, 154)]
+    cv_rotated_rect = cv2.minAreaRect(np.array(pts))
     cv_rotated_rects = [cv_rotated_rect]
     box = cv2.boxPoints(cv_rotated_rect)
     for i in range(box.__len__()):
         cv2.line(image_, (int(box[i][0]), int(box[i][1])),
-                 (int(box[(i+1) % 4][0]), int(box[(i+1) % 4][1])), (0, 0, 255))
+                 (int(box[(i+1) % 4][0]), int(box[(i+1) % 4][1])), (255, 128, 255))
     # Annotations of quadrilaterals
     quadrilaterals = [(163, 276, 206, 300, 217, 337, 143, 316)]
     for n in range(quadrilaterals.__len__()):
@@ -307,10 +309,14 @@ if __name__ == '__main__':
 
     cv2.imshow('initial_image', image_)
 
+
+    start = time.time()
     # Define the rotater and rotate the image
     rotater = Rotater(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
                       cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons)
-    results = rotater.rotate(15)
+    results = rotater.rotate((-5, 5))
+    end = time.time()
+    print(end-start)
 
     image_rotated = results['image']
     # Draw rotated annotations of points
@@ -327,10 +333,10 @@ if __name__ == '__main__':
     new_np_rotated_rects = results['np_rotated_rects']
     for r in range(new_np_rotated_rects.shape[1]):
         x_min = int(new_np_rotated_rects[0, 0])
-        y_min = int(new_np_rotated_rects[1, 0])
-        x_max = int(new_np_rotated_rects[2, 0])
-        y_max = int(new_np_rotated_rects[3, 0])
-        theta = int(new_np_rotated_rects[4, 0])
+        y_min = int(new_np_rotated_rects[0, 1])
+        x_max = int(new_np_rotated_rects[0, 2])
+        y_max = int(new_np_rotated_rects[0, 3])
+        theta = int(new_np_rotated_rects[0, 4])
         cv2.circle(image_rotated, (x_min, y_min), 1, (255, 0, 0))
         cv2.circle(image_rotated, (x_max, y_max), 1, (255, 0, 0))
     # Draw rotated annotations of rectangles formatted as opencv
@@ -339,7 +345,7 @@ if __name__ == '__main__':
     box = cv2.boxPoints(cv_rotated_rect)
     for i in range(cv_rotated_rect.__len__()):
         cv2.line(image_rotated, (int(box[i][0]),int(box[i][1])),
-                 (int(box[(i+1) % 4][0]), int(box[(i+1) % 4][1])), (0, 0, 255))
+                 (int(box[(i+1) % 4][0]), int(box[(i+1) % 4][1])), (255, 128, 255))
     # Draw rotated annotations of quadrilaterals
     new_quadrilaterals = results['quadrilaterals']
     for n in range(new_quadrilaterals.__len__()):
@@ -353,6 +359,10 @@ if __name__ == '__main__':
         for i in range(new_polygons[n].__len__()):
             cv2.line(image_rotated, new_polygons[n][i], new_polygons[n][(i+1) % new_polygons[n].__len__()], (255, 0, 255))
 
+
+
     # Show the results
     cv2.imshow('rotated_image', image_rotated)
     cv2.waitKey(0)
+
+
