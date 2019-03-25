@@ -20,7 +20,7 @@ class RotatedRect:
 
 class Rotater:
     def __init__(self, image, points=[], rects=[], np_rotated_rects=np.zeros((1,5)), cv_rotated_rects=[],
-                 quadrilaterals=[], polygons=[], rotation_angle=(-15,15)):
+                 quadrilaterals=[], polygons=[]):
         self.image = image
         self.points = points
         self.rects = rects
@@ -28,7 +28,7 @@ class Rotater:
         self.cv_rotated_rects = cv_rotated_rects
         self.quadrilaterals = quadrilaterals
         self.polygons = polygons
-        self.rotation_angle = rotation_angle
+        self.rotation_angle = (-15, 15)
 
         self.points_flag = False
         self.rects_flag = False
