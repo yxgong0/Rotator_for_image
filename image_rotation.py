@@ -242,7 +242,7 @@ class Rotator:
 
 if __name__ == '__main__':
     # Read image to be rotated
-    image = cv2.imread('D:/test.jpg')
+    image = cv2.imread('./test.jpg')
     image_ = image.copy()
     # Annotations formatted as points
     points = [(113, 127), (156, 127), (156, 170), (113, 170), (179, 127), (224, 127), (224, 171), (179, 171)]
@@ -342,5 +342,3 @@ if __name__ == '__main__':
     # Show the results
     cv2.imshow('rotated_image', image_rotated)
     cv2.waitKey(0)
-
-    cv2.imwrite('D:/result.bmp', image_rotated)
