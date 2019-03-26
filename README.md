@@ -1,5 +1,5 @@
 # Rotator for image
-A method to rotate images and the annotations on them for data augmentation.
+A method to rotate an image and its annotations for different angles or different ranges of angles.
 
 Requirements
 -------
