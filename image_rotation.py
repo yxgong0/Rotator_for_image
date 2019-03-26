@@ -20,7 +20,7 @@ class RotatedRect:
 
 class Rotator:
     def __init__(self, image, points=[], rects=[], np_rotated_rects=np.zeros((1,5)), cv_rotated_rects=[],
-                 quadrilaterals=[], polygons=[]):
+                 quadrilaterals=[], polygons=[], expand_edge=True):
         self.image = image
         self.points = points
         self.rects = rects
@@ -29,6 +29,7 @@ class Rotator:
         self.quadrilaterals = quadrilaterals
         self.polygons = polygons
         self.rotation_angle = (-15, 15)
+        self.expand_edge=expand_edge
 
         self.points_flag = False
         self.rects_flag = False
@@ -51,6 +52,7 @@ class Rotator:
 
     def check_parameters(self):
         assert isinstance(self.image, np.ndarray)
+        assert isinstance(self.expand_edge, bool)
         assert isinstance(self.points, list) or isinstance(self.points, tuple)
         assert isinstance(self.rects, list) or isinstance(self.rects, tuple)
         assert isinstance(self.np_rotated_rects, np.ndarray) and self.np_rotated_rects.shape.__len__() == 2
@@ -123,8 +125,12 @@ class Rotator:
 
         # Calculate the new width and height after rotation
         (h, w) = self.image.shape[:2]
-        new_w = round(abs(h * math.sin(radian)) + abs(w * math.cos(radian)))
-        new_h = round(abs(w * math.sin(radian)) + abs(h * math.cos(radian)))
+        if self.expand_edge:
+            new_w = round(abs(h * math.sin(radian)) + abs(w * math.cos(radian)))
+            new_h = round(abs(w * math.sin(radian)) + abs(h * math.cos(radian)))
+        else:
+            new_w = w
+            new_h = h
         height_increment = int(round(new_h - h))
         width_increment = int(round(new_w - w))
         self.new_w = new_w
@@ -242,7 +248,7 @@ class Rotator:
 
 if __name__ == '__main__':
     # Read image to be rotated
-    image = cv2.imread('./test.jpg')
+    image = cv2.imread('D:/test.jpg')
     image_ = image.copy()
     # Annotations formatted as points
     points = [(113, 127), (156, 127), (156, 170), (113, 170), (179, 127), (224, 127), (224, 171), (179, 171)]
@@ -293,7 +299,8 @@ if __name__ == '__main__':
 
     # Define the rotater and rotate the image
     rotator = Rotator(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
-                      cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons)
+                      cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons,
+                      expand_edge=True)
     results = rotator.rotate(15)
 
     image_rotated = results['image']
