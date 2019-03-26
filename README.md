@@ -11,11 +11,6 @@ Numpy1.15
 
 Details
 -------
-This method will rotate the input images and extend the edge to ensure all the pixels of the initial image will not be abandoned.
-That means the procedure will look like this:![1](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch1.png)
-
-We are not doing this work:![2](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch2.png)
-
 You need to build a rotator for one image with its annotations. The parameters means:
 
 ‘image’ is the image needed to be rotated, which should be loaded by cv2.imread() function
@@ -31,6 +26,9 @@ You need to build a rotator for one image with its annotations. The parameters m
 'quadrilaterals' is a list of some quadrilaterals. One quadrilateral is a tuple with 8 numbers, which means the 4 vertexes of it. The first two numbers represents the x and y of the first vertex and the rest may be deduced by analogy. It can be empty while the output will be None.
 
 'polygons' is a list of polygons. Each element contains some tuples which represents the coordinates of the vertixes. It can be empty while the output will be None.
+
+'expand_edge' is a boolean variable, when its value is True, the image will be expanded before rotated to ensure that no pixel of the image will be abandoned. The process will look like this:![1](https://github.com/Alpaca07/Rotator_for_image/blob/master/examples/sketch1.png)
+If it is set False, the rotation will not change the size of the image. The process will look like this:![2](https://github.com/Alpaca07/Rotator_for_image/blob/master/examples/sketch2.png)
 
 Tips: While using this class, you can transform numpy.ndarray to list with .tolist() or transform list to numpy.ndarray with numpy.array(list).
 
