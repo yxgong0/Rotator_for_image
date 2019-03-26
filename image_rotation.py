@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import math
 import random
-import time
+
 
 # Definition of rotated rectangles, where box_points is a list of the four vertexes of the rectangle
 # The range of the angle is [0, 360)
@@ -134,13 +134,6 @@ class Rotater:
 
         # Extend the edges of the initial image according to the new width and height
         image_expanded = np.zeros((int(new_h), int(new_w), 3), np.uint8)
-        # for s in range(int(new_h)):
-        #     for t in range(int(new_w)):
-        #         if height_increment // 2 <= s < height_increment // 2 + h and \
-        #                 width_increment // 2 <= t < width_increment // 2 + w:
-        #             image_expanded[s, t][0] = self.image[s - height_increment // 2, t - width_increment // 2][0]
-        #             image_expanded[s, t][1] = self.image[s - height_increment // 2, t - width_increment // 2][1]
-        #             image_expanded[s, t][2] = self.image[s - height_increment // 2, t - width_increment // 2][2]
         image_expanded[height_increment // 2:height_increment // 2 + h, width_increment // 2:width_increment // 2 + w]\
             = self.image
 
@@ -202,17 +195,6 @@ class Rotater:
             # Produce the rotated rect from cv_rotated_rect
             new_cv_rotated_rects = []
             for cv_rotated_rect in self.cv_rotated_rects:
-                # center = cv_rotated_rect[0]
-                # (w, h) = cv_rotated_rect[1]
-                # theta = cv_rotated_rect[2]
-                # new_center = self.rotate_point(center)
-                # new_theta = theta - angle
-                # while new_theta < -90:
-                #     new_theta += 90
-                # while new_theta >= 0:
-                #     new_theta -= 90
-                # new_cv_rotated_rect = (new_center, (w, h), new_theta)
-                # new_cv_rotated_rects.append(new_cv_rotated_rect)
                 box_points = cv2.boxPoints(cv_rotated_rect)
                 pt1 = (box_points[0][0], box_points[0][1])
                 pt2 = (box_points[1][0], box_points[1][1])
@@ -309,14 +291,10 @@ if __name__ == '__main__':
 
     cv2.imshow('initial_image', image_)
 
-
-    start = time.time()
     # Define the rotater and rotate the image
     rotater = Rotater(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
                       cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons)
-    results = rotater.rotate(60)
-    end = time.time()
-    print(end-start)
+    results = rotater.rotate(15)
 
     image_rotated = results['image']
     # Draw rotated annotations of points
