@@ -51,8 +51,8 @@ class Rotater:
 
     def check_parameters(self):
         assert isinstance(self.image, np.ndarray)
-        assert isinstance(self.points, list)
-        assert isinstance(self.rects, list)
+        assert isinstance(self.points, list) or isinstance(self.points, tuple)
+        assert isinstance(self.rects, list) or isinstance(self.rects, tuple)
         assert isinstance(self.np_rotated_rects, np.ndarray) and self.np_rotated_rects.shape.__len__() == 2
         assert isinstance(self.cv_rotated_rects, tuple) or isinstance(self.cv_rotated_rects, list)
         assert isinstance(self.quadrilaterals, list) or isinstance(self.quadrilaterals, tuple)
