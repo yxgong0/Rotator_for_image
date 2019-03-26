@@ -16,7 +16,7 @@ That means the procedure will look like this:![1](https://github.com/Alpaca07/im
 
 We are not doing this work:![2](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch2.png)
 
-You need to build a rotater for one image with its annotations. The parameters means:
+You need to build a rotator for one image with its annotations. The parameters means:
 
 ‘image’ is the image needed to be rotated, which should be loaded by cv2.imread() function
 
@@ -34,7 +34,7 @@ You need to build a rotater for one image with its annotations. The parameters m
 
 Tips: While using this class, you can transform numpy.ndarray to list with .tolist() or transform list to numpy.ndarray with numpy.array(list).
 
-Then a rotater of an image has been created. You can invoke the method rotate(rotation_angle) to rotate the image and its annotations.
+Then a rotator of an image has been created. You can invoke the method rotate(rotation_angle) to rotate the image and its annotations.
 
 ‘rotation_angle’ can be an integer or a tuple with length 2
 
