@@ -18,7 +18,7 @@ class RotatedRect:
         return self.box_points
 
 
-class Rotater:
+class Rotator:
     def __init__(self, image, points=[], rects=[], np_rotated_rects=np.zeros((1,5)), cv_rotated_rects=[],
                  quadrilaterals=[], polygons=[]):
         self.image = image
@@ -292,9 +292,9 @@ if __name__ == '__main__':
     cv2.imshow('initial_image', image_)
 
     # Define the rotater and rotate the image
-    rotater = Rotater(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
+    rotator = Rotator(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
                       cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons)
-    results = rotater.rotate(15)
+    results = rotator.rotate(15)
 
     image_rotated = results['image']
     # Draw rotated annotations of points
