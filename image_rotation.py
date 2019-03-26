@@ -98,8 +98,8 @@ class Rotater:
         point_translated = (point_expanded[0] - self.new_w / 2., self.new_h / 2. - point_expanded[1])
         point_rotated = (point_translated[0] * math.cos(self.radian) - point_translated[1] * math.sin(self.radian),
                          point_translated[0] * math.sin(self.radian) + point_translated[1] * math.cos(self.radian))
-        point_restored = (int(math.ceil(point_rotated[0] + self.new_w / 2.)),
-                          int(math.ceil(-1 * point_rotated[1] + self.new_h / 2.)))
+        point_restored = (int(round(point_rotated[0] + self.new_w / 2.)),
+                          int(round(-1 * point_rotated[1] + self.new_h / 2.)))
 
         return point_restored
 
@@ -117,16 +117,16 @@ class Rotater:
         while angle < 0:
             angle += 360
         angle = angle % 360
-        radian = angle * 3.1416 / 180.
+        radian = angle * 3.1415927 / 180.
         self.angle = angle
         self.radian = radian
 
         # Calculate the new width and height after rotation
         (h, w) = self.image.shape[:2]
-        new_w = math.ceil(abs(h * math.sin(radian)) + abs(w * math.cos(radian)))
-        new_h = math.ceil(abs(w * math.sin(radian)) + abs(h * math.cos(radian)))
-        height_increment = int(math.ceil(new_h - h))
-        width_increment = int(math.ceil(new_w - w))
+        new_w = round(abs(h * math.sin(radian)) + abs(w * math.cos(radian)))
+        new_h = round(abs(w * math.sin(radian)) + abs(h * math.cos(radian)))
+        height_increment = int(round(new_h - h))
+        width_increment = int(round(new_w - w))
         self.new_w = new_w
         self.new_h = new_h
         self.height_increased = height_increment
@@ -145,7 +145,7 @@ class Rotater:
             = self.image
 
         # Rotate the image
-        M = cv2.getRotationMatrix2D((new_h / 2., new_w / 2.), angle, 1.0)
+        M = cv2.getRotationMatrix2D((new_w / 2., new_h / 2.), angle, 1.0)
         image_rotated = cv2.warpAffine(image_expanded, M, (int(new_w), int(new_h)))
         self.results['image'] = image_rotated
 
@@ -314,7 +314,7 @@ if __name__ == '__main__':
     # Define the rotater and rotate the image
     rotater = Rotater(image, points=points, rects=rects, np_rotated_rects=np_rotated_rects,
                       cv_rotated_rects=cv_rotated_rects, quadrilaterals=quadrilaterals, polygons=polygons)
-    results = rotater.rotate((-5, 5))
+    results = rotater.rotate(60)
     end = time.time()
     print(end-start)
 
@@ -365,4 +365,4 @@ if __name__ == '__main__':
     cv2.imshow('rotated_image', image_rotated)
     cv2.waitKey(0)
 
-
+    cv2.imwrite('D:/result.bmp', image_rotated)
