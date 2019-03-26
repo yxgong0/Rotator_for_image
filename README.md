@@ -1,12 +1,16 @@
 # image_rotation
 A method to rotate images and the annotations on them for data augmentation.
 
-# Requirements
+Requirements
+-------
 Python3
 
 OpenCV3.4
 
-# Details
+Numpy1.15
+
+Details
+-------
 This method will rotate the input images and extend the edge to ensure all the pixels of the initial image will not be abandoned.
 That means the procedure will look like this:![1](https://github.com/Alpaca07/imgae_rotation/blob/master/examples/sketch1.png)
 
@@ -27,6 +31,8 @@ You need to build a rotater for one image with its annotations. The parameters m
 'quadrilaterals' is a list of some quadrilaterals. One quadrilateral is a tuple with 8 numbers, which means the 4 vertexes of it. The first two numbers represents the x and y of the first vertex and the rest may be deduced by analogy. It can be empty while the output will be None.
 
 'polygons' is a list of polygons. Each element contains some tuples which represents the coordinates of the vertixes. It can be empty while the output will be None.
+
+Tips: While using this class, you can transform numpy.ndarray to list with .tolist() or transform list to numpy.ndarray with numpy.array(list).
 
 Then a rotater of an image has been created. You can invoke the method rotate(rotation_angle) to rotate the image and its annotations.
 
