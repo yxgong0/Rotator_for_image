@@ -11,7 +11,7 @@ Numpy1.15
 
 Details
 -------
-You need to build a rotator for one image with its annotations. The parameters means:
+You need to build a rotator for one image with its annotations. The parameters mean:
 
 ‘image’ is the image needed to be rotated, which should be loaded by cv2.imread() function
 
