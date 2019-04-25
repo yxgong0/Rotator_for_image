@@ -11,7 +11,8 @@ Numpy1.15
 
 Details
 -------
-You need to build a rotator for one image with its annotations. The parameters mean:
+At first, it is necessary to import the Rotator by: from image_rotation import Rotator
+Then you need to build a rotator for one image with its annotations. The parameters mean:
 
 ‘image’ is the image needed to be rotated, which should be loaded by cv2.imread() function
 
