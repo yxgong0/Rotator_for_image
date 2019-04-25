@@ -67,7 +67,7 @@ class Rotator:
                 assert isinstance(point, tuple) and point.__len__() == 2
         if self.rects.__len__() > 0:
             self.rects_flag = True
-            for rect in rects:
+            for rect in self.rects:
                 assert isinstance(rect, tuple) and rect.__len__() == 4
         if self.np_rotated_rects.nonzero().__len__() != 0:
             self.np_rotated_rects_flag = True
@@ -87,7 +87,7 @@ class Rotator:
                        and quadrilateral.__len__() == 8
         if self.polygons.__len__() != 0:
             self.polygons_flag = True
-            for polygon in polygons:
+            for polygon in self.polygons:
                 assert isinstance(polygon, tuple) or isinstance(polygon, list)
                 for pt in polygon:
                     assert isinstance(pt, tuple) and pt.__len__() == 2
@@ -151,7 +151,7 @@ class Rotator:
         if self.points_flag:
             # Calculate the new coordinates of the input points
             new_points = []
-            for point in points:
+            for point in self.points:
                 new_point = self.rotate_point(point)
                 new_points.append(new_point)
             self.results['points'] = new_points
@@ -159,7 +159,7 @@ class Rotator:
         if self.rects_flag:
             # Produce the rotated rect from rect
             new_rects = []
-            for rect in rects:
+            for rect in self.rects:
                 center = (rect[0] + rect[2] / 2., rect[1] + rect[3] / 2.)
                 new_center = self.rotate_point(center)
                 tl_point = (rect[0], rect[1])
@@ -235,7 +235,7 @@ class Rotator:
         if self.polygons_flag:
             # Produce the rotated polygons from input ones
             new_polygons = []
-            for polygon in polygons:
+            for polygon in self.polygons:
                 new_polygon = []
                 for pt in polygon:
                     new_pt = self.rotate_point(pt)
